@@ -7,6 +7,10 @@ import { dark } from "@clerk/themes";
 import { UnauthenticatedView } from "@/features/auth/components/unauthenticated-view";
 import { AuthLoadingView } from "@/features/auth/components/auth-loading-view";
 
+if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
+  throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')
+}
+
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
