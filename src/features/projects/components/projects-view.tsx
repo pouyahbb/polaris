@@ -9,6 +9,8 @@ import { FaGithub } from "react-icons/fa";
 import ProjectsList from "./projects-list"
 import { useCreateProject } from "../hooks/use-projects"
 import {adjectives, animals, colors, uniqueNamesGenerator} from 'unique-names-generator'
+import { useEffect, useState } from "react"
+import { ProjectCommandDialog } from "./project-command-dialog"
 
 const font = Poppins({
     subsets: ["latin"],
@@ -17,54 +19,77 @@ const font = Poppins({
 
 export const ProjectsView = () => {
     const createProject = useCreateProject()
+    const [commandDialogOpen , setCommandDialogOpen] = useState(false)
+
+    useEffect(() => {
+        const handleKeydown = (e:KeyboardEvent) => {
+            // Ignore if user is typing in an input field
+            const target = e.target as HTMLElement
+            if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+                return
+            }
+            
+            if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+                e.preventDefault()
+                setCommandDialogOpen(true)
+            }
+        }
+        document.addEventListener("keydown" , handleKeydown)
+        return () => {
+            document.removeEventListener("keydown" , handleKeydown)
+        }
+    } , [])
 
     return (
-        <div className="min-h-screen bg-sidebar flex flex-col items-center justify-center p-6 md:p-16">
-            <div className="max-w-sm w-full mx-auto flex flex-col gap-4 items-center">
-                <div className="flex justify-between gap-4 w-full items-center">
-                    <div className="flex items-center gap-2 w-full group/logo" >
-                        <img src="/vercel.svg" alt="Polaris" className="size-[32px] md:size-[46px]" />
-                        <h1 className={cn("text-4xl md:text-5xl font-semibold" , font.className)}>Polaris</h1>
+        <>
+            <ProjectCommandDialog open={commandDialogOpen} onOpenChange={setCommandDialogOpen} />
+            <div className="min-h-screen bg-sidebar flex flex-col items-center justify-center p-6 md:p-16">
+                <div className="max-w-sm w-full mx-auto flex flex-col gap-4 items-center">
+                    <div className="flex justify-between gap-4 w-full items-center">
+                        <div className="flex items-center gap-2 w-full group/logo" >
+                            <img src="/logo.svg" alt="Polaris" className="size-[32px] md:size-[46px]" />
+                            <h1 className={cn("text-4xl md:text-5xl font-semibold" , font.className)}>Polaris</h1>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 w-full">
+                        <div className="grid grid-cols-2 gap-2">
+                            <Button variant="outline" onClick={() => {
+                                const projectName = uniqueNamesGenerator({
+                                    dictionaries : [adjectives , animals , colors],
+                                    separator : "-",
+                                    length : 3
+                                })
+                                createProject({
+                                    name : projectName
+                                })
+                            }} className="h-full items-start justify-start p-4 bg-background border flex flex-col gap-6 rounded-none">
+                                <div className="flex items-center justify-between w-full">
+                                    <Sparkle className="size-4" />
+                                    <Kbd className="bg-accent border ">
+                                        ctrl + J
+                                    </Kbd>
+                                </div>
+                                <div >
+                                    <span className="text-sm">New</span>
+                                </div>
+                            </Button>
+                            <Button variant="outline" onClick={() => {}} className="h-full items-start justify-start p-4 bg-background border flex flex-col gap-6 rounded-none">
+                                <div className="flex items-center justify-between w-full">
+                                    <FaGithub  className="size-4" />
+                                    <Kbd className="bg-accent border ">
+                                        ctrl + I
+                                    </Kbd>
+                                </div>
+                                <div >
+                                    <span className="text-sm">Import</span>
+                                </div>
+                            </Button>
+                        </div>
+                        <ProjectsList onViewAll={() => {setCommandDialogOpen(true)}} />
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 w-full">
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button variant="outline" onClick={() => {
-                            const projectName = uniqueNamesGenerator({
-                                dictionaries : [adjectives , animals , colors],
-                                separator : "-",
-                                length : 3
-                            })
-                            createProject({
-                                name : projectName
-                            })
-                        }} className="h-full items-start justify-start p-4 bg-background border flex flex-col gap-6 rounded-none">
-                            <div className="flex items-center justify-between w-full">
-                                <Sparkle className="size-4" />
-                                <Kbd className="bg-accent border ">
-                                    ctrl + J
-                                </Kbd>
-                            </div>
-                            <div >
-                                <span className="text-sm">New</span>
-                            </div>
-                        </Button>
-                        <Button variant="outline" onClick={() => {}} className="h-full items-start justify-start p-4 bg-background border flex flex-col gap-6 rounded-none">
-                            <div className="flex items-center justify-between w-full">
-                                <FaGithub  className="size-4" />
-                                <Kbd className="bg-accent border ">
-                                    ctrl + I
-                                </Kbd>
-                            </div>
-                            <div >
-                                <span className="text-sm">Import</span>
-                            </div>
-                        </Button>
-                    </div>
-                    <ProjectsList onViewAll={() => {}} />
-                </div>
-            </div>
 
-        </div>
+            </div>
+        </>
     )
 }
