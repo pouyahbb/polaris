@@ -24,15 +24,56 @@ export const getPartial = query({
     },
     handler : async (ctx ,args) => {
         const identity =  await verifyAuth(ctx)
-        const query =  await ctx.db.query("projects").withIndex("by_owner", q => q.eq("ownerId" , identity.subject)).take(args.limit);
+        const query =  await ctx.db.query("projects").withIndex("by_owner", q => q.eq("ownerId" , identity.subject)).order("desc").take(args.limit);
         return query
     }
 })
 
 export const get = query({
     args:{},
-    handler : async (ctx ,args) => {
+    handler : async (ctx) => {
         const identity =  await verifyAuth(ctx)
-        return await ctx.db.query("projects").withIndex("by_owner", q => q.eq("ownerId" , identity.subject)).collect();
+        return await ctx.db.query("projects").withIndex("by_owner", q => q.eq("ownerId" , identity.subject)).order("desc").collect();
+    }
+})
+
+export const getById = query({
+    args:{
+        projectId : v.id("projects")
+    },
+    handler : async (ctx , args) => {
+        const identity =  await verifyAuth(ctx)
+        
+        const project = await ctx.db.get("projects" , args.projectId)
+        if(!project){
+            throw new Error("Project not found") 
+        }
+        if(project.ownerId !== identity.subject){
+            throw new Error("Unauthorized access to this project")
+        }
+        return project
+    }
+})
+
+
+export const rename = mutation({
+    args:{
+        projectId : v.id("projects"),
+        name : v.string()
+    },
+    handler : async (ctx , args) => {
+        const identity =  await verifyAuth(ctx)
+        
+        const project = await ctx.db.get("projects" , args.projectId)
+        if(!project){
+            throw new Error("Project not found") 
+        }
+        if(project.ownerId !== identity.subject){
+            throw new Error("Unauthorized access to this project")
+        }
+        await ctx.db.patch(args.projectId , {
+            name : args.name,
+            updatedAt : Date.now()
+        })
     }
 })
