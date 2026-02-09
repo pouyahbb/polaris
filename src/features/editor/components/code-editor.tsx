@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef } from "react"
-import {EditorView , keymap} from '@codemirror/view'
+import {EditorView} from '@codemirror/view'
 import { oneDark } from "@codemirror/theme-one-dark"
 import { customTheme } from "../extentions/theme"
 import { getLanguageExtention } from "../extentions/language-extention"
-import {indentWithTab} from '@codemirror/commands'
 import { minimap } from "../extentions/minimap"
 import {indentationMarkers} from "@replit/codemirror-indentation-markers"
 import { customSetup } from "../extentions/custom-setup"
+import { suggestion } from "../extentions/suggestion"
 
 interface Props {
   fileName: string
@@ -37,7 +37,7 @@ const CodeEditor = ({ fileName , onChange , initialValue}: Props) => {
         oneDark, 
         customTheme, 
         languageExtention , 
-        keymap.of([indentWithTab]) , 
+        suggestion(fileName),
         minimap() , 
         indentationMarkers() , 
         EditorView.updateListener.of((update) => {
