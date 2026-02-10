@@ -6,6 +6,7 @@ import { ThemeProvider } from "./theme-provider";
 import { dark } from "@clerk/themes";
 import { UnauthenticatedView } from "@/features/auth/components/unauthenticated-view";
 import { AuthLoadingView } from "@/features/auth/components/auth-loading-view";
+import { TooltipProvider } from "./ui/tooltip";
 
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
   throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')
@@ -22,17 +23,19 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
                 client={convex}
                 useAuth={useAuth}
             >
-                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange >
-                    <Authenticated>
-                       {children}
-                    </Authenticated>
-                    <Unauthenticated>
-                        <UnauthenticatedView />
-                    </Unauthenticated>
-                    <AuthLoading>
-                        <AuthLoadingView />
-                    </AuthLoading>
-                </ThemeProvider>
+                 <TooltipProvider>
+                    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange >
+                        <Authenticated>
+                        {children}
+                        </Authenticated>
+                        <Unauthenticated>
+                            <UnauthenticatedView />
+                        </Unauthenticated>
+                        <AuthLoading>
+                            <AuthLoadingView />
+                        </AuthLoading>
+                    </ThemeProvider>
+                 </TooltipProvider>
             </ConvexProviderWithClerk>
         </ClerkProvider>
     )
