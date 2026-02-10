@@ -1,5 +1,6 @@
 "use client"
 
+import ConversationSidebar from "@/features/conversations/components/conversation-sidebar";
 import { Id } from "../../../../convex/_generated/dataModel"
 import { Navbar } from "./navbar"
 import {Allotment} from 'allotment'
@@ -17,9 +18,7 @@ export const ProjectIdLayout = ({children , projectId} : {children : React.React
             <div className="flex-1 flex overflow-hidden ">
             <Allotment className="flex-1" defaultSizes={[DEFAULT_CONVERSATION_SIDEBAR_WIDTH, DEFAULT_MAIN_SIZE]}>
                 <Allotment.Pane snap minSize={MIN_SIDEBAR_WIDTH} maxSize={MAX_SIDEBAR_WIDTH} preferredSize={DEFAULT_CONVERSATION_SIDEBAR_WIDTH}>
-                    <div>
-                        conversation sidebar
-                    </div>
+                    <ConversationSidebar projectId={projectId}/>
                 </Allotment.Pane>
                 <Allotment.Pane>
                     {children}
