@@ -6,6 +6,9 @@ import { api } from "../../../../convex/_generated/api";
 
 interface MessageEvent   {
     messageId : Id<"messages">,
+    conversationId : Id<"conversations">,
+    projectId : Id<"projects">,
+    message : string
 }
 
 export const processMessage = inngest.createFunction(
@@ -34,12 +37,12 @@ export const processMessage = inngest.createFunction(
         event : "message/sent"
     },
     async ({event,step}) => {
-        const {messageId } = event.data as MessageEvent
+        const {messageId, conversationId, projectId, message} = event.data as MessageEvent
         const internalKey = process.env.CONVEX_INTERNAL_KEY
         if(!internalKey){
             throw new NonRetriableError("CONVEX_INTERNAL_KEY is missing or not configured")
         }
-        await step.sleep("Waiting-for-ai-processing" , "5s")
+        await step.sleep("Waiting-for-ai-processing" , "50s")
         await step.run("update-assistant-message", async() => {
             await convex.mutation(api.system.updateMessageContent , {
                 internalKey,
