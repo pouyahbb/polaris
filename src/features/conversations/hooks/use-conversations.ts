@@ -2,12 +2,19 @@ import { useMutation, useQuery } from "convex/react"
 import { api } from "../../../../convex/_generated/api"
 import { Doc, Id } from "../../../../convex/_generated/dataModel"
 
+// Helper to check if an ID is an optimistic (temporary) ID
+const isOptimisticId = (id: string | null): boolean => {
+    return id !== null && typeof id === "string" && id.startsWith("optimistic-")
+}
+
 export const useConversation = (id: Id<"conversations"> | null) => {
-    return useQuery(api.conversations.getById, id ? {id} : "skip" )
+    // Skip query if ID is optimistic (temporary) - it will be replaced when mutation completes
+    return useQuery(api.conversations.getById, id && !isOptimisticId(id) ? {id} : "skip" )
 }
 
 export const useMessages = (conversationId: Id<"conversations"> | null) => {
-    return useQuery(api.conversations.getMessages, conversationId ? {conversationId } : "skip" )
+    // Skip query if ID is optimistic (temporary) - it will be replaced when mutation completes
+    return useQuery(api.conversations.getMessages, conversationId && !isOptimisticId(conversationId) ? {conversationId } : "skip" )
 }
 
 export const useConversations = (projectId: Id<"projects">) => {

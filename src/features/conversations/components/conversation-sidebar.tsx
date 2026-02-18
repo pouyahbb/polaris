@@ -65,6 +65,13 @@ const ConversationSidebar = ({ projectId }: ConversationSidebarProps) => {
                 return 
             }
         }
+        
+        // Reject optimistic IDs - wait for real ID from mutation
+        if(conversationId && conversationId.startsWith("optimistic-")){
+            toast.error("Please wait for the conversation to be created")
+            return
+        }
+        
         try{
             await ky.post("/api/messages" , { 
                 json : {

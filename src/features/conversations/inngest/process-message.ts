@@ -9,6 +9,11 @@ import {createAgent , createNetwork, openai} from '@inngest/agent-kit'
 import { createReadFilesTool } from "./tools/read-files";
 import { createListFilesTool } from "./tools/list-files";
 import { createUpdateFileTool } from "./tools/update-file";
+import { createCreateFilesTool } from "./tools/create-files";
+import { createCreateFolderTool } from "./tools/create-folder";
+import { createRenameFileTool } from "./tools/rename-file";
+import { createDeleteFilesTool } from "./tools/delete-files";
+import { createScrapeUrlsTool } from "./tools/scrape-urls";
 
 interface MessageEvent   {
     messageId : Id<"messages">,
@@ -85,9 +90,7 @@ export const processMessage = inngest.createFunction(
                     model : "gpt-4o-mini",
                 }),
             })
-            const {output} = await step.run("generate-title", async () => {
-                return await titleAgent.run(message , {step})
-            })
+            const {output} = await titleAgent.run(message , {step})
             const textMessage = output.find(m => m.type === "text" && m.role === "assistant")
             if(textMessage?.type === "text"){
                 generatedTitle = typeof textMessage.content === "string" ? textMessage.content.trim() : textMessage.content.map(c => c.text).join("").trim()
@@ -95,12 +98,10 @@ export const processMessage = inngest.createFunction(
         }
         
         if(generatedTitle){
-            await step.run("update-conversation-title" , async() => {
-                await convex.mutation(api.system.updateConversationTitle, { 
-                    internalKey , 
-                    conversationId , 
-                    title: generatedTitle!
-                })
+            await convex.mutation(api.system.updateConversationTitle, { 
+                internalKey , 
+                conversationId , 
+                title: generatedTitle!
             })
         }
 
@@ -115,7 +116,12 @@ export const processMessage = inngest.createFunction(
             tools : [
                 createListFilesTool({projectId , internalKey}),
                 createReadFilesTool({internalKey}),
-                createUpdateFileTool({internalKey})
+                createUpdateFileTool({internalKey}),
+                createCreateFilesTool({projectId , internalKey}),
+                createCreateFolderTool({projectId , internalKey}),
+                createRenameFileTool({internalKey}),
+                createDeleteFilesTool({internalKey}),
+                createScrapeUrlsTool()
             ]
         })
 
@@ -131,7 +137,6 @@ export const processMessage = inngest.createFunction(
                 return codingAgent
             }
         })
-
         const result = await network.run(message)
 
         const lastResult = result.state.results.at(-1)

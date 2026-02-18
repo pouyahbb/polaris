@@ -29,6 +29,14 @@ export async function POST (request : Request) {
 
     const body = await request.json()
     const {conversationId, message}  = requestSchema.parse(body)
+    
+    // Reject optimistic (temporary) IDs - they are not valid Convex IDs
+    if (conversationId.startsWith("optimistic-")) {
+        return NextResponse.json({
+            error : "Invalid conversation ID. Please wait for the conversation to be created.",
+        } , {status : 400})
+    }
+    
     const conversation = await convex.query(api.system.getConversationById , {
         conversationId : conversationId as Id<"conversations">,
         internalKey : process.env.CONVEX_INTERNAL_KEY! ?? "skip"

@@ -10,9 +10,7 @@ interface ReadFilesToolOptions {
 
 const paramsSchema = z.object({
     fileIds : z.array(z.string().min(1 , "File ID cannot be empty")).min(1 , "Provide at least one file ID"),
-
 })
-
 
 export const createReadFilesTool = ({internalKey} : ReadFilesToolOptions) => {
     return createTool({
