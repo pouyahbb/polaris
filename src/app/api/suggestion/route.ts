@@ -1,12 +1,17 @@
-import { openai } from '@ai-sdk/openai';
-import { auth } from '@clerk/nextjs/server';
 import { generateText, Output } from "ai";
-import {  NextResponse } from "next/server";
-import z from "zod/v3";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { anthropic } from "@ai-sdk/anthropic";
+// import { google } from "@ai-sdk/google";
 
 const suggestionSchema = z.object({
-    suggestion : z.string().describe("The code to insert at cursor, or empty string if no completion needed")
-})
+  suggestion: z
+    .string()
+    .describe(
+      "The code to insert at cursor, or empty string if no completion needed"
+    ),
+});
 
 const SUGGESTION_PROMPT = `You are a code suggestion assistant.
 
@@ -38,43 +43,57 @@ Follow these steps IN ORDER:
 Your suggestion is inserted immediately after the cursor, so never suggest code that's already in the file.
 </instructions>`;
 
+export async function POST(request: Request) {
+  try {
+    const { userId } = await auth();
 
-export async function POST(request : Request) {
-    try{
-        const {userId} =await auth()
-        if (!userId){
-            return NextResponse.json({error : "Unauthorized"}, {status : 401})
-        }
-        const {
-            fileName , 
-            code , 
-            currentLine , 
-            previousLines , 
-            textBeforeCursor , 
-            textAfterCursor , 
-            nextLines , 
-            lineNumber
-        } = await request.json()
-        if(!code){
-            return NextResponse.json({error : "Code is required"}, {status : 400})
-        }
-        const prompt = SUGGESTION_PROMPT.replace("{fileName}", fileName)
-            .replace("{code}", code)
-            .replace("{currentLine}", currentLine)
-            .replace("{previousLines}", previousLines || "")
-            .replace("{textBeforeCursor}", textBeforeCursor)
-            .replace("{textAfterCursor}", textAfterCursor)
-            .replace("{nextLines}", nextLines || "")
-            .replace("{lineNumber}", lineNumber.toString())
-        
-        const {output} = await generateText({
-            model : openai("gpt-4o-mini-2024-07-18"),
-            output : Output.object({schema : suggestionSchema}),
-            prompt
-        })
-        return NextResponse.json({suggestion : output.suggestion})
-    }catch(err){
-        console.error(err)
-        return NextResponse.json({error : "Failed to generate suggestion"}, {status : 500})
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 },
+      );
     }
+
+    const {
+      fileName,
+      code,
+      currentLine,
+      previousLines,
+      textBeforeCursor,
+      textAfterCursor,
+      nextLines,
+      lineNumber,
+    } = await request.json();
+
+    if (!code) {
+      return NextResponse.json(
+        { error: "Code is required" },
+        { status: 400 }
+      );
+    }
+
+    const prompt = SUGGESTION_PROMPT
+      .replace("{fileName}", fileName)
+      .replace("{code}", code)
+      .replace("{currentLine}", currentLine)
+      .replace("{previousLines}", previousLines || "")
+      .replace("{textBeforeCursor}", textBeforeCursor)
+      .replace("{textAfterCursor}", textAfterCursor)
+      .replace("{nextLines}", nextLines || "")
+      .replace("{lineNumber}", lineNumber.toString());
+
+    const { output } = await generateText({
+      model: anthropic("claude-3-7-sonnet-20250219"),
+      output: Output.object({ schema: suggestionSchema }),
+      prompt,
+    });
+
+    return NextResponse.json({ suggestion: output.suggestion })
+  } catch (error) {
+    console.error("Suggestion error: ", error);
+    return NextResponse.json(
+      { error: "Failed to generate suggestion" },
+      { status: 500 },
+    );
+  }
 }

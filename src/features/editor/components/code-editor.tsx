@@ -1,63 +1,69 @@
 import { useEffect, useMemo, useRef } from "react"
-import {EditorView} from '@codemirror/view'
-import { oneDark } from "@codemirror/theme-one-dark"
-import { customTheme } from "../extentions/theme"
-import { getLanguageExtention } from "../extentions/language-extention"
-import { minimap } from "../extentions/minimap"
-import {indentationMarkers} from "@replit/codemirror-indentation-markers"
-import { customSetup } from "../extentions/custom-setup"
-import { suggestion } from "../extentions/suggestion"
-import { quickEdit } from "../extentions/quick-edit"
-import { selectionTooltip } from "../extentions/selection-tooltip"
+import { EditorView, keymap } from "@codemirror/view";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { indentWithTab } from "@codemirror/commands";
+import { indentationMarkers } from "@replit/codemirror-indentation-markers";
+
+import { minimap } from "../extensions/minimap";
+import { customTheme } from "../extensions/theme";
+import { getLanguageExtension } from "../extensions/language-extension";
+import { customSetup } from "../extensions/custom-setup";
+import { suggestion } from "../extensions/suggestion";
+import { quickEdit } from "../extensions/quick-edit";
+import { selectionTooltip } from "../extensions/selection-tooltip";
 
 interface Props {
-  fileName: string
-  onChange:(value:string) => void
-  initialValue : string
+  fileName: string;
+  initialValue?: string;
+  onChange: (value: string) => void;
 }
 
+export const CodeEditor = ({ 
+  fileName, 
+  initialValue = "",
+  onChange
+}: Props) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const viewRef = useRef<EditorView | null>(null);
 
-
-const CodeEditor = ({ fileName , onChange , initialValue}: Props) => {
-  const editorRef = useRef<HTMLDivElement>(null)
-  const viewRef = useRef<EditorView | null>(null)
-
-  const languageExtention = useMemo(
-    () => getLanguageExtention(fileName),
-    [fileName]
-  )
-
+  const languageExtension = useMemo(() => {
+    return getLanguageExtension(fileName)
+  }, [fileName])
 
   useEffect(() => {
-    if (!editorRef.current) return
+    if (!editorRef.current) return;
 
     const view = new EditorView({
       doc: initialValue,
       parent: editorRef.current,
       extensions: [
-        customSetup, 
-        oneDark, 
-        customTheme, 
-        languageExtention , 
-        quickEdit(fileName),
+        oneDark,
+        customTheme,
+        customSetup,
+        languageExtension,
         suggestion(fileName),
+        quickEdit(fileName),
         selectionTooltip(),
-        minimap() , 
-        indentationMarkers() , 
+        keymap.of([indentWithTab]),
+        minimap(),
+        indentationMarkers(),
         EditorView.updateListener.of((update) => {
-            if(update.docChanged){
-                onChange(update.state.doc.toString())
-            }
-      })],
-    })
-    viewRef.current = view
+          if (update.docChanged) {
+            onChange(update.state.doc.toString());
+          }
+        })
+      ],
+    });
+
+    viewRef.current = view;
 
     return () => {
-      view.destroy()
-    }
-  }, [languageExtention])
+      view.destroy();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- initialValue is only used for initial document
+  }, [languageExtension]);
 
-  return <div ref={editorRef} className="size-full pl-4 bg-background" />
-}
-
-export default CodeEditor
+  return (
+    <div ref={editorRef} className="size-full pl-4 bg-background" />
+  );
+};
