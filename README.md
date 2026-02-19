@@ -1,261 +1,460 @@
-# Polaris - Build a Cursor AI Alternative
+# Polaris - Cloud IDE with AI
 
-This is the repository for a comprehensive [YouTube tutorial series](https://youtu.be/Xf9rHPNBMyQ) where we build a **fully-featured cloud IDE** from scratch.
+A fully-featured browser-based IDE inspired by Cursor AI, featuring real-time collaborative editing, AI-powered code suggestions, conversation-based AI assistant, in-browser code execution, and GitHub integration.
 
-[![Watch the Tutorial](https://img.shields.io/badge/YouTube-Watch%20Tutorial-red?style=for-the-badge&logo=youtube)](https://youtu.be/Xf9rHPNBMyQ)
+**Repository:** [https://github.com/pouyahbb/polaris](https://github.com/pouyahbb/polaris)
 
-> **Note:** This is **Part 1 of 2** of the tutorial series. The codebase is functional but incomplete - Part 2 will add the AI Agent, WebContainer preview, and GitHub integration.
+## 🌟 Features
 
-## What We're Building
+### Code Editor
 
-Polaris is a browser-based IDE inspired by Cursor AI, featuring:
+- **Multi-language Support**: Syntax highlighting for JavaScript, TypeScript (TS/TSX), JSX, HTML, CSS, JSON, Markdown (MD/MDX), and Python
+- **Advanced Editor Features**:
+  - Line numbers and code folding
+  - Minimap overview for navigation
+  - Bracket matching and indentation guides
+  - Multi-cursor editing support
+  - Rectangular selection
+  - Search and replace functionality
+  - Auto-completion
+  - One Dark theme with custom styling
 
-- Real-time collaborative code editing
-- AI-powered code suggestions and quick edit (Cmd+K)
-- Conversation-based AI assistant
-- In-browser code execution with WebContainer
-- GitHub import/export integration
-- Multi-file project management
+### AI-Powered Features
 
-## Tech Stack
+- **Real-time Code Suggestions**: AI-powered ghost text suggestions that appear as you type (accept with Tab)
+- **Quick Edit (Cmd+K)**: Select code and use natural language instructions to edit it instantly
+- **Selection Tooltip**: Quick action tooltip when code is selected
+- **Conversation-Based AI Assistant**: 
+  - Full conversation history with context awareness
+  - AI agent with file management tools (create, read, update, delete files and folders)
+  - Automatic conversation title generation
+  - Message cancellation support
+  - Background processing with Inngest for non-blocking UI
 
-| Category      | Technologies                                                |
-| ------------- | ----------------------------------------------------------- |
-| **Frontend**  | Next.js 16, React 19, TypeScript, Tailwind CSS 4            |
-| **Editor**    | CodeMirror 6, Custom Extensions, One Dark Theme             |
-| **Backend**   | Convex (Real-time DB), Inngest (Background Jobs)            |
-| **AI**        | Claude Sonnet 4 (preferred) or Gemini 2.0 Flash (free tier) |
-| **Auth**      | Clerk (with GitHub OAuth)                                   |
-| **Execution** | WebContainer API, xterm.js                                  |
-| **UI**        | shadcn/ui, Radix UI                                         |
+### File Management
 
-## Part 1 Contents (Chapters 1-12)
+- **File Explorer**: 
+  - Hierarchical folder structure
+  - VSCode-style file icons
+  - Create, rename, and delete files and folders
+  - Drag-and-drop support
+  - Breadcrumb navigation
+- **Tab-based Navigation**: Multiple files open simultaneously with tab management
+- **Auto-save**: Automatic file saving with debouncing (500ms)
+- **Binary File Support**: Handles both text and binary files with proper storage
 
-### Phase 1: Foundation & Sponsor Technologies
+### Real-time Collaboration
 
-- **Chapter 1:** Project Setup, UI Library & Theme
-- **Chapter 2:** Clerk Authentication & Protected Routes
-- **Chapter 3:** Convex Database & Real-time Setup
-- **Chapter 4:** Inngest - Background Jobs & Non-Blocking UI
-- **Chapter 5:** Firecrawl - Teaching AI with Live Documentation
-- **Chapter 6:** Sentry - Error Tracking & LLM Monitoring
-- **Chapter 7:** Projects Dashboard & Landing Page
+- **Convex-powered Real-time Updates**: Instant synchronization across all clients
+- **Optimistic UI Updates**: Immediate feedback for better user experience
+- **Background Job Processing**: Non-blocking operations with Inngest
 
-### Phase 2: File System & Editor
+### Project Management
 
-- **Chapter 8:** Project IDE Layout & Resizable Panes
-- **Chapter 9:** File Explorer - Full Implementation
-- **Chapter 10:** Code Editor & State Management
+- **Multi-project Support**: Create and manage multiple projects
+- **Project Dashboard**: Overview of all your projects
+- **Project Settings**: Configure install and dev commands for WebContainer
+- **AI Project Creation**: Generate projects from natural language prompts
 
-### Phase 3: AI Features (Partial)
+### GitHub Integration
 
-- **Chapter 11:** AI Suggestions & Quick Edit
-- **Chapter 12:** Conversation System
+- **Import from GitHub**: Import entire repositories with folder structure and files
+- **Export to GitHub**: Export projects as new GitHub repositories (public or private)
+- **Status Tracking**: Real-time import/export status with progress indicators
+- **Cancellation Support**: Cancel ongoing export operations
 
-## Part 2 Contents (Chapters 13-16) - Coming Soon
+### In-Browser Execution (WebContainer)
 
-- **Chapter 13:** AI Agent & Tools (AgentKit, file management tools)
-- **Chapter 14:** WebContainer, Terminal & Preview
-- **Chapter 15:** GitHub Import & Export
-- **Chapter 16:** AI Project Creation & Final Polish
+- **Live Preview**: Run and preview your projects directly in the browser
+- **Terminal Integration**: Full terminal access with xterm.js
+- **Hot Reload**: Automatic file synchronization and hot reload
+- **Custom Commands**: Configure install and dev commands per project
+- **Status Monitoring**: Track boot, install, and running states
 
-## Getting Started
+### Authentication & Security
 
-### Prerequisites
+- **Clerk Authentication**: Secure authentication with GitHub OAuth
+- **Protected Routes**: All routes require authentication
+- **User-specific Projects**: Projects are isolated per user
+- **Internal API Security**: Secure internal API with key validation
 
-- Node.js 20.09+
-- npm or pnpm
-- Accounts needed:
-  - [Clerk](https://cwa.run/clerk) - Authentication
-  - [Convex](https://cwa.run/convex) - Database
-  - [Inngest](https://cwa.run/inngest) - Background jobs
-  - [Anthropic](https://anthropic.com) or [Google AI Studio](https://aistudio.google.com) - AI API (one required)
-  - [Firecrawl](https://cwa.run/firecrawl) - Web scraping (optional)
-  - [Sentry](https://cwa.run/sentry) - Error tracking (optional)
+## 🛠️ Tech Stack
 
-### Installation
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
+| **Editor** | CodeMirror 6, Custom Extensions, One Dark Theme |
+| **Backend** | Convex (Real-time DB), Inngest (Background Jobs) |
+| **AI** | Claude Sonnet 4 / Claude Opus 4 (preferred) or Gemini 2.0 Flash (free tier) |
+| **Auth** | Clerk (with GitHub OAuth) |
+| **Execution** | WebContainer API, xterm.js |
+| **UI** | shadcn/ui, Radix UI |
+| **Error Tracking** | Sentry |
+| **Web Scraping** | Firecrawl (for AI documentation context) |
 
-1. Clone the repository:
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** 20.09 or higher
+- **npm** or **pnpm** package manager
+- **Git** for cloning the repository
+
+### Required Accounts & API Keys
+
+You'll need accounts and API keys from the following services:
+
+1. **[Clerk](https://clerk.com)** - Authentication service
+   - Create an account and set up a new application
+   - Get your Publishable Key and Secret Key
+   - Configure GitHub OAuth provider
+
+2. **[Convex](https://convex.dev)** - Real-time database
+   - Create an account and a new project
+   - Get your deployment URL
+   - Note your deployment name
+
+3. **[Inngest](https://inngest.com)** - Background job processing
+   - Create an account and set up a new app
+   - Configure for local development
+
+4. **AI Provider** (choose at least one):
+   - **[Anthropic](https://anthropic.com)** - For Claude Sonnet 4 / Opus 4 (recommended)
+   - **[Google AI Studio](https://aistudio.google.com)** - For Gemini 2.0 Flash (free tier alternative)
+   - **[OpenAI](https://openai.com)** - Alternative option
+
+5. **[Firecrawl](https://firecrawl.dev)** - Web scraping (optional, for AI documentation context)
+   - Create an account and get your API key
+
+6. **[Sentry](https://sentry.io)** - Error tracking (optional)
+   - Create an account and project
+   - Get your DSN
+
+## 🚀 Installation & Setup
+
+### Step 1: Clone the Repository
 
    ```bash
-   git clone https://github.com/code-with-antonio/polaris.git
+git clone https://github.com/pouyahbb/polaris.git
    cd polaris
    ```
 
-2. Install dependencies:
+### Step 2: Install Dependencies
 
    ```bash
    npm install
    ```
 
-3. Set up environment variables:
+### Step 3: Set Up Environment Variables
 
-   ```bash
-   cp .env.example .env.local
-   ```
+Create a `.env.local` file in the root directory:
 
-4. Configure your `.env.local` with the required keys:
+
+Open `.env.local` and configure the following environment variables:
 
    ```env
-   # Clerk
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-   CLERK_SECRET_KEY=
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+CLERK_JWT_ISSUER_DOMAIN=your-app.clerk.accounts.dev
 
-   # Convex
-   NEXT_PUBLIC_CONVEX_URL=
-   CONVEX_DEPLOYMENT=
-   POLARIS_CONVEX_INTERNAL_KEY=  # Generate a random string
+# Convex Database
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
+CONVEX_DEPLOYMENT=your-deployment-name
+CONVEX_INTERNAL_KEY=your-random-secret-key-here  # Generate a random string
 
-   # AI Provider (choose one)
-   ANTHROPIC_API_KEY=        # Preferred - Claude Sonnet 4
-   GOOGLE_GENERATIVE_AI_API_KEY=  # Free alternative - Gemini 2.0 Flash
+# AI Provider (choose at least one)
+# Option 1: Anthropic (recommended)
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Option 2: Google AI
+GOOGLE_GENERATIVE_AI_API_KEY=AIza...
+
+# Option 3: OpenAI
+OPENAI_API_KEY=sk-...
 
    # Firecrawl (optional)
-   FIRECRAWL_API_KEY=
+FIRECRAWL_API_KEY=fc-...
 
    # Sentry (optional)
-   SENTRY_DSN=
-   ```
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+SENTRY_DSN=https://...@sentry.io/...
+```
 
-5. Start the Convex development server:
+#### Important Notes:
+
+- **CONVEX_INTERNAL_KEY**: Generate a random secure string (e.g., using `openssl rand -hex 32` or any random string generator). This key is used for internal API security.
+- **AI Provider**: You need at least one of `ANTHROPIC_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, or `OPENAI_API_KEY`. The application will use Anthropic if available, otherwise falls back to Google or OpenAI.
+- **CLERK_JWT_ISSUER_DOMAIN**: This is typically in the format `your-app-name.clerk.accounts.dev`. You can find it in your Clerk dashboard.
+
+### Step 4: Set Up Convex
+
+Initialize and start the Convex development server:
 
    ```bash
    npx convex dev
    ```
 
-6. In a new terminal, start the Next.js development server:
+This will:
+- Set up your Convex project
+- Push the schema to Convex
+- Start the Convex development server
+- Watch for changes and auto-sync
+
+**Note**: Keep this terminal running. The Convex dev server needs to be running for the application to work.
+
+### Step 5: Set Up Inngest (New Terminal)
+
+Open a new terminal window and start the Inngest dev server:
+
+```bash
+npx inngest-cli@latest dev
+```
+
+This will:
+- Start the Inngest development server
+- Allow background jobs to run locally
+- Provide a dashboard at `http://localhost:8288`
+
+**Note**: Keep this terminal running as well.
+
+### Step 6: Start the Next.js Development Server (New Terminal)
+
+Open another new terminal window and start the Next.js server:
 
    ```bash
    npm run dev
    ```
 
-7. In another terminal, start the Inngest dev server:
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-   ```bash
-   npx inngest-cli@latest dev
-   ```
+### Step 7: Access the Application
 
-8. Open [http://localhost:3000](http://localhost:3000)
+1. Open your browser and navigate to `http://localhost:3000`
+2. You'll be prompted to sign in with Clerk
+3. Complete the authentication flow
+4. Start creating and managing your projects!
 
-## Project Structure
+## 📁 Project Structure
 
 ```
-src/
-├── app/                    # Next.js App Router
-│   ├── api/               # API routes
-│   │   ├── messages/      # Conversation API
-│   │   ├── suggestion/    # AI suggestions
-│   │   └── quick-edit/    # Cmd+K editing
-│   └── projects/          # Project pages
-├── components/            # Shared components
-│   ├── ui/               # shadcn/ui components
-│   └── ai-elements/      # AI conversation components
-├── features/
-│   ├── auth/             # Authentication
-│   ├── conversations/    # AI chat system
-│   ├── editor/           # CodeMirror setup
-│   │   └── extensions/   # Custom extensions
-│   ├── preview/          # WebContainer (Part 2)
-│   └── projects/         # Project management
-├── inngest/              # Inngest client
-└── lib/                  # Utilities
-
-convex/
-├── schema.ts             # Database schema
-├── projects.ts           # Project queries/mutations
-├── files.ts              # File operations
-├── conversations.ts      # Conversation operations
-└── system.ts             # Internal API for Inngest
+polaris/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/                # API routes
+│   │   │   ├── messages/      # Conversation API endpoints
+│   │   │   ├── suggestion/    # AI code suggestions
+│   │   │   ├── quick-edit/    # Cmd+K quick edit
+│   │   │   ├── projects/       # Project management APIs
+│   │   │   ├── github/         # GitHub import/export
+│   │   │   └── inngest/        # Inngest webhook
+│   │   ├── projects/           # Project pages
+│   │   │   └── [projectId]/   # Individual project pages
+│   │   ├── layout.tsx          # Root layout
+│   │   └── page.tsx            # Home page
+│   ├── components/             # Shared components
+│   │   ├── ui/                # shadcn/ui components
+│   │   ├── ai-elements/       # AI conversation UI components
+│   │   ├── providers.tsx      # App providers (Clerk, Convex, Theme)
+│   │   └── env-check-dialog.tsx # Environment variable checker
+│   ├── features/              # Feature modules
+│   │   ├── auth/              # Authentication components
+│   │   ├── conversations/     # AI chat system
+│   │   │   ├── components/    # Conversation UI
+│   │   │   ├── hooks/        # Conversation hooks
+│   │   │   └── inngest/      # Message processing
+│   │   │       └── tools/    # AI agent tools
+│   │   ├── editor/           # CodeMirror editor
+│   │   │   ├── components/   # Editor components
+│   │   │   ├── extensions/   # CodeMirror extensions
+│   │   │   │   ├── suggestion/  # AI suggestions
+│   │   │   │   ├── quick-edit/  # Cmd+K editing
+│   │   │   │   └── ...          # Other extensions
+│   │   │   ├── hooks/        # Editor hooks
+│   │   │   └── store/        # Editor state management
+│   │   ├── preview/          # WebContainer preview
+│   │   │   ├── components/    # Preview UI
+│   │   │   ├── hooks/        # WebContainer hooks
+│   │   │   └── utils/        # File tree utilities
+│   │   └── projects/         # Project management
+│   │       ├── components/    # Project UI components
+│   │       ├── hooks/        # Project hooks
+│   │       └── inngest/       # GitHub import/export jobs
+│   ├── inngest/              # Inngest client and functions
+│   └── lib/                  # Utilities
+│       ├── convex-client.ts  # Convex client setup
+│       ├── firecrawl.ts      # Firecrawl client
+│       └── utils.ts          # General utilities
+├── convex/                   # Convex backend
+│   ├── schema.ts             # Database schema
+│   ├── auth.ts               # Authentication helpers
+│   ├── projects.ts           # Project queries/mutations
+│   ├── files.ts              # File operations
+│   ├── conversations.ts      # Conversation operations
+│   └── system.ts             # Internal API for Inngest
+├── public/                   # Static assets
+├── next.config.ts            # Next.js configuration
+├── tsconfig.json             # TypeScript configuration
+└── package.json              # Dependencies
 ```
 
-## Features Implemented (Part 1)
-
-### Editor
-
-- Syntax highlighting for JS, TS, CSS, HTML, JSON, Markdown, Python
-- Line numbers and code folding
-- Minimap overview
-- Bracket matching and indentation guides
-- Multi-cursor editing
-
-### AI Features
-
-- Real-time code suggestions with ghost text
-- Quick edit with Cmd+K (select code + natural language instruction)
-- Selection tooltip for quick actions
-- Conversation sidebar with message history
-
-### File Management
-
-- File explorer with folder hierarchy
-- Create, rename, delete files and folders
-- VSCode-style file icons
-- Tab-based file navigation
-- Auto-save with debouncing
-
-### Real-time
-
-- Convex-powered instant updates
-- Optimistic UI updates
-- Background job processing with Inngest
-
-## Current Limitations (Part 1)
-
-These features are planned for Part 2:
-
-- AI agent cannot yet modify files (mock response only)
-- No message cancellation
-- No past conversations dialog
-- No code preview/execution
-- No GitHub integration
-- No AI project generation
-
-## Scripts
+## 🔧 Available Scripts
 
 ```bash
-npm run dev       # Start development server
-npm run build     # Build for production
-npm run start     # Start production server
-npm run lint      # Run ESLint
+# Development
+npm run dev          # Start Next.js development server
+
+# Production
+npm run build        # Build for production
+npm run start        # Start production server
+
+# Code Quality
+npm run lint         # Run ESLint
 ```
 
-## Tutorial Links
+## 🎯 Key Features Explained
 
-- **YouTube Playlist:** [Coming Soon]
-- **Part 1:** Chapters 1-12
-- **Part 2:** Chapters 13-16
+### AI Code Suggestions
 
-## Sponsors
+The editor provides real-time AI-powered code suggestions as you type. Suggestions appear as ghost text (semi-transparent) after your cursor. Press `Tab` to accept a suggestion.
 
-A huge thank you to the sponsors who made this tutorial possible. Consider checking them out - they offer generous free tiers perfect for learning!
+- **Debounced**: Suggestions are generated 300ms after you stop typing
+- **Context-aware**: Considers the entire file, previous/next lines, and cursor position
+- **Smart filtering**: Only suggests when appropriate (not after complete statements)
 
-### Authentication
+### Quick Edit (Cmd+K)
 
-**[Clerk](https://cwa.run/clerk)** - Add authentication to your app in minutes, not days.
+Select any code in the editor and press `Cmd+K` (or `Ctrl+K` on Windows/Linux) to open the quick edit tooltip. Enter a natural language instruction to modify the selected code.
 
-### Database
+- **In-place editing**: Changes are applied directly in the editor
+- **Context preservation**: AI considers the full file context
+- **URL support**: Can scrape documentation from URLs you provide
 
-**[Convex](https://cwa.run/convex)** - The real-time database that makes building collaborative apps a breeze.
+### AI Conversation Assistant
 
-### Background Jobs
+The conversation sidebar provides a full AI coding assistant powered by Claude Opus 4. The assistant can:
 
-**[Inngest](https://cwa.run/inngest)** - Reliable background jobs and event-driven workflows.
+- **Read files**: Understand your project structure and code
+- **Create files**: Generate new files with content
+- **Update files**: Modify existing files based on your instructions
+- **Create folders**: Organize your project structure
+- **Rename/Delete**: Manage files and folders
+- **Scrape URLs**: Fetch and understand documentation from web pages
 
-### Web Scraping
+The assistant processes requests in the background using Inngest, so the UI remains responsive.
 
-**[Firecrawl](https://cwa.run/firecrawl)** - Turn any website into LLM-ready data.
+### WebContainer Preview
 
-### Error Tracking
+The preview panel uses WebContainer API to run your projects directly in the browser:
 
-**[Sentry](https://cwa.run/sentry)** - See what's broken and fix it fast.
+- **No server required**: Everything runs client-side
+- **Hot reload**: Changes sync automatically
+- **Terminal access**: Full terminal with command execution
+- **Custom commands**: Configure install and dev commands per project
 
-### Code Review
+### GitHub Integration
 
-**[CodeRabbit](https://cwa.run/coderabbit)** - AI-powered code reviews that catch bugs before your users do.
+**Import from GitHub:**
+1. Click the import button in the project dashboard
+2. Enter the repository owner and name
+3. Authenticate with GitHub
+4. The entire repository is imported with folder structure intact
 
-## Acknowledgments
+**Export to GitHub:**
+1. Open a project
+2. Click the export button
+3. Choose repository name, visibility (public/private), and description
+4. Authenticate with GitHub
+5. The project is exported as a new repository
+
+Both operations run in the background and show real-time status.
+
+## 🔐 Environment Variables Reference
+
+### Required Variables
+
+| Variable | Description | Where to Get |
+|----------|-------------|--------------|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | Clerk Dashboard → API Keys |
+| `CLERK_SECRET_KEY` | Clerk secret key | Clerk Dashboard → API Keys |
+| `CLERK_JWT_ISSUER_DOMAIN` | Clerk JWT issuer domain | Clerk Dashboard → Settings |
+| `CONVEX_DEPLOYMENT` | Convex deployment name | Convex Dashboard → Settings |
+| `NEXT_PUBLIC_CONVEX_URL` | Convex deployment URL | Convex Dashboard → Settings |
+| `CONVEX_INTERNAL_KEY` | Internal API security key | Generate a random string |
+| At least one AI key | AI provider API key | See AI Provider section |
+
+### Optional Variables
+
+| Variable | Description | Where to Get |
+|----------|-------------|--------------|
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Google AI API key | Google AI Studio |
+| `OPENAI_API_KEY` | OpenAI API key | OpenAI Platform |
+| `ANTHROPIC_API_KEY` | Anthropic API key | Anthropic Console |
+| `FIRECRAWL_API_KEY` | Firecrawl API key | Firecrawl Dashboard |
+| `SENTRY_AUTH_TOKEN` | Sentry auth token | Sentry Settings → Auth Tokens |
+| `SENTRY_DSN` | Sentry DSN | Sentry Project → Settings → Client Keys |
+
+## 🐛 Troubleshooting
+
+### Environment Variables Not Detected
+
+If you see the environment variable dialog on app load:
+
+1. Ensure `.env.local` exists in the project root
+2. Check that all required variables are set
+3. Restart the Next.js development server after adding variables
+4. Verify variable names match exactly (case-sensitive)
+
+### Convex Connection Issues
+
+- Ensure `npx convex dev` is running
+- Check that `NEXT_PUBLIC_CONVEX_URL` matches your Convex deployment
+- Verify your Convex project is active in the dashboard
+
+### Inngest Jobs Not Running
+
+- Ensure `npx inngest-cli@latest dev` is running
+- Check the Inngest dashboard at `http://localhost:8288`
+- Verify the Inngest webhook is configured in your Inngest dashboard
+
+### AI Features Not Working
+
+- Verify at least one AI API key is set
+- Check API key validity and quota
+- Review browser console for error messages
+- Ensure the API route `/api/suggestion` and `/api/quick-edit` are accessible
+
+### WebContainer Not Loading
+
+- Check browser console for errors
+- Ensure WebContainer API is supported in your browser
+- Verify project has valid `package.json` and install/dev commands
+
+## 📚 Additional Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Convex Documentation](https://docs.convex.dev)
+- [Inngest Documentation](https://www.inngest.com/docs)
+- [Clerk Documentation](https://clerk.com/docs)
+- [CodeMirror Documentation](https://codemirror.net/docs)
+- [WebContainer API](https://webcontainers.io)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
 
 - [Cursor](https://cursor.sh) - Inspiration for the project
 - [Orchids](https://orchids.app) - Inspiration for the project
 - [shadcn/ui](https://ui.shadcn.com) - UI components
 - [CodeMirror](https://codemirror.net) - Code editor
+- All the amazing open-source libraries that made this possible
+
+---
+
+**Built with ❤️ using Next.js, Convex, and AI**

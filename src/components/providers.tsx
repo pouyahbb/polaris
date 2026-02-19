@@ -13,6 +13,7 @@ import { UnauthenticatedView } from "@/features/auth/components/unauthenticated-
 import { AuthLoadingView } from "@/features/auth/components/auth-loading-view";
 
 import { ThemeProvider } from "./theme-provider";
+import { EnvCheckDialog } from "./env-check-dialog";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -26,6 +27,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           enableSystem
           disableTransitionOnChange
         >
+          <EnvCheckDialog />
           <Authenticated>
             {children}
           </Authenticated>
