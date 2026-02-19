@@ -66,6 +66,22 @@ export function EnvCheckDialog() {
               </div>
             </div>
 
+            {/* GitHub Instructions */}
+            <div className="p-4 bg-muted/50 rounded-lg border">
+              <p className="text-sm text-muted-foreground mb-3">
+                You can clone the project from GitHub and run it on your local system. 
+                The complete setup and running instructions are available in the README section on GitHub.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => window.open(GITHUB_REPO_URL, "_blank")}
+                className="w-full"
+              >
+                <ExternalLink className="size-4" />
+                View Setup Instructions on GitHub
+              </Button>
+            </div>
+
             {/* Missing Variables List */}
             <div>
               <p className="text-sm font-medium mb-3">
@@ -94,22 +110,6 @@ export function EnvCheckDialog() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* GitHub Instructions */}
-            <div className="p-4 bg-muted/50 rounded-lg border">
-              <p className="text-sm text-muted-foreground mb-3">
-                You can clone the project from GitHub and run it on your local system. 
-                The complete setup and running instructions are available in the README section on GitHub.
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => window.open(GITHUB_REPO_URL, "_blank")}
-                className="w-full"
-              >
-                <ExternalLink className="size-4" />
-                View Setup Instructions on GitHub
-              </Button>
             </div>
           </div>
         </div>
